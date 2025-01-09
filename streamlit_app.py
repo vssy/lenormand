@@ -4,7 +4,31 @@ from PIL import Image
 import os
 from anthropic import Anthropic
 from config import CLAUDE_API_KEY, CARDS, ARRAYS
-from arrays.array_layouts import get_array_description
+
+def get_array_description(array_type):
+    array_layouts = {
+        "單張牌": {
+            "positions": ["單張牌"],
+            "description": "最基本的牌陣，用於快速回答是/否問題或獲得簡單指引。"
+        },
+        "三張牌": {
+            "positions": ["過去", "現在", "未來"],
+            "description": "經典的三張牌陣，展示情況的發展脈絡。"
+        },
+        "五張牌": {
+            "positions": ["過去", "現在", "問題關鍵", "建議", "可能結果"],
+            "description": "深入分析問題的五張牌陣，提供更全面的視角和建議。"
+        },
+        "十字牌陣": {
+            "positions": ["當前處境", "阻礙", "建議", "外在影響", "可能結果"],
+            "description": "以十字形排列的五張牌陣，從多個角度分析問題。"
+        }
+    }
+    return array_layouts.get(array_type, {
+        "positions": ["位置"],
+        "description": "未知牌陣"
+    })
+
 
 def initialize_session():
     if 'selected_cards' not in st.session_state:
